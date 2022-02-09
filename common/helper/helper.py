@@ -194,3 +194,17 @@ def get_compartments_data(identity_client, compartment_id):
         lifecycle_state="ACTIVE",
         retry_strategy=oci.retry.DEFAULT_RETRY_STRATEGY
     ).data
+
+def get_ip_sec_connections_per_compartment(network_client, compartment_id):
+    return oci.pagination.list_call_get_all_results(
+        network_client.list_ip_sec_connections,
+        compartment_id,
+        retry_strategy=oci.retry.DEFAULT_RETRY_STRATEGY
+    ).data
+
+def get_ip_sec_connections_tunnels_per_connection(network_client, ipsec_id):
+    return oci.pagination.list_call_get_all_results(
+        network_client.list_ip_sec_connection_tunnels,
+        ipsec_id,
+        retry_strategy=oci.retry.DEFAULT_RETRY_STRATEGY
+    ).data
