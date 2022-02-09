@@ -57,7 +57,8 @@ def test_case():
                     region_needed['region'] = region.region_name
                     debug(region_needed,color = 'cyan')
                     n_client = get_virtual_network_client(region_needed, signer)
-                    debug(signer, "blue")
+                    debug(dir(signer), "blue")
+                    debug(signer.region, "green")
                     debug(region.region_name, "yellow")
                     n_client.base_client.endpoint = 'https://vnca-api.' + region.region_name + '.oci.oraclecloud.com'
                     __topologies_with_cpe_connections_objects.append(get_networking_topology_per_compartment(n_client,com_region[0]))
