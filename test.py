@@ -30,8 +30,9 @@ def test_case():
                 if com_region[1] == region.region_key.lower() or com_region[1] == region.region_name.lower() :
                     region_needed = config
                     region_needed['region'] = region.region_name
-
+                    debug(region_needed,color = 'cyan')
                     n_client = get_virtual_network_client(region_needed, signer)
+                    debug(region.region_name, "yellow")
                     n_client.base_client.endpoint = 'https://vnca-api.' + region.region_name + '.oci.oraclecloud.com'
                     __topologies_with_cpe_connections_objects.append(get_networking_topology_per_compartment(n_client,com_region[0]))
 

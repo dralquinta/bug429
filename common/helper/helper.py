@@ -1,5 +1,8 @@
 import oci
 import os
+from termcolor import colored
+from inspect import getframeinfo, stack
+from datetime import datetime
 
 CUSTOM_RETRY_STRATEGY = oci.retry.RetryStrategyBuilder().add_max_attempts(max_attempts=8) \
                                                         .add_total_elapsed_time(total_elapsed_time_seconds=600) \
@@ -124,3 +127,60 @@ def create_signer(config_profile, is_instance_principals, is_delegation_token):
             print(
                 f'** OCI Config was not found here : {oci.config.DEFAULT_LOCATION} or env varibles missing, aborting **')
             raise SystemExit
+
+def debug(msg, color=None):
+    frame = getframeinfo(stack()[1][0])
+    filename = os.path.splitext(os.path.basename(frame.filename))[0]
+    lineno = str(frame.lineno)    
+
+    debug_exp = get_current_date()+" DEBUG: "+filename+".py:"+lineno+" - "+str(msg)
+
+    if (color == "red"):
+        print(turn_red(debug_exp), flush=True)
+    elif (color == "green"):
+        print(turn_green(debug_exp), flush=True)
+    elif (color == "yellow"):
+        print(turn_yellow(debug_exp), flush=True)
+    elif (color == "blue"):
+        print(turn_blue(debug_exp), flush=True)
+    elif (color == "magenta"):
+        print(turn_magenta(debug_exp), flush=True)
+    elif (color == "cyan"):
+        print(turn_cyan(debug_exp), flush=True)
+    elif (color == "grey"):
+        print(turn_grey(debug_exp), flush=True)
+    else:
+        print(turn_white(debug_exp), flush=True)
+
+
+
+def dye_return(msg):
+    if(msg == "No"):
+        return turn_red(msg)
+    elif(msg == "Ok"):
+        return turn_green(msg)
+
+
+def turn_red(msg):
+    return colored(msg, 'red')
+
+def turn_green(msg):
+    return colored(msg, 'green')
+
+def turn_yellow(msg):
+    return colored(msg, 'yellow')
+
+def turn_blue(msg):
+    return colored(msg, 'blue')
+
+def turn_magenta(msg):
+    return colored(msg, 'magenta')
+
+def turn_cyan(msg):
+    return colored(msg, 'cyan')
+
+def turn_white(msg):
+    return colored(msg, 'white')
+
+def turn_grey(msg):
+    return colored(msg, 'grey')
