@@ -1,4 +1,5 @@
 import oci
+import os
 
 CUSTOM_RETRY_STRATEGY = oci.retry.RetryStrategyBuilder().add_max_attempts(max_attempts=8) \
                                                         .add_total_elapsed_time(total_elapsed_time_seconds=600) \

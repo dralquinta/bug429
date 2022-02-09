@@ -1,6 +1,6 @@
 import argparse
 from common.helper.helper import *
-impo
+
 
 
 def test_case():
@@ -10,8 +10,9 @@ def test_case():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', default="", dest='config_profile',
-                        help='Config file section to use (tenancy profile)')       
-    
+                        help='Config file section to use (tenancy profile)')
+    parser.add_argument('-ip', action='store_true', default=False,
+                        dest='is_instance_principals', help='Use Instance Principals for Authentication')           
     parser.add_argument('-dt', action='store_true', default=False,
                         dest='is_delegation_token', help='Use Delegation Token for Authentication')
     cmd = parser.parse_args() 
@@ -33,3 +34,10 @@ def test_case():
                     n_client = get_virtual_network_client(region_needed, signer)
                     n_client.base_client.endpoint = 'https://vnca-api.' + region.region_name + '.oci.oraclecloud.com'
                     __topologies_with_cpe_connections_objects.append(get_networking_topology_per_compartment(n_client,com_region[0]))
+
+
+def __main__():
+    test_case()
+
+
+__main__()
