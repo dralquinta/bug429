@@ -208,3 +208,10 @@ def get_ip_sec_connections_tunnels_per_connection(network_client, ipsec_id):
         ipsec_id,
         retry_strategy=oci.retry.DEFAULT_RETRY_STRATEGY
     ).data
+
+def get_cross_connects_per_compartment(network_client, compartment_id):
+    return oci.pagination.list_call_get_all_results(
+        network_client.list_cross_connects,
+        compartment_id,
+        retry_strategy=oci.retry.DEFAULT_RETRY_STRATEGY
+    ).data
