@@ -4,7 +4,7 @@
 # Description: Parallel executor variables for use with helper.py
 
 from concurrent import futures
-from common.utils.helpers.helper import *
+from common.helper.helper import *
 from datetime import datetime, timedelta
 
 availability_domains = []
