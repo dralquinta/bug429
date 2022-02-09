@@ -1,5 +1,6 @@
 import argparse
 from common.helper.helper import *
+import common.helper.ParallelExecutor as ParallelExecutor
 
 
 
@@ -7,6 +8,9 @@ def test_case():
 
     vpn_fc_connections_per_compartment = set()
     __topologies_with_cpe_connections_objects = []
+    network_cleints = []
+
+    
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', default="", dest='config_profile',
@@ -20,9 +24,30 @@ def test_case():
     config, signer = create_signer(cmd.config_profile, cmd.is_instance_principals, cmd.is_delegation_token)
 
     __identity = get_identity_client(config, signer)
-
     __regions = get_regions_data(__identity, config)
+    __tenancy = get_tenancy_data(__identity, config)
 
+    __compartments = get_compartments_data(__identity, __tenancy.id)
+
+    for region in __regions:            
+        region_config = config
+        region_config['region'] = region.region_name     
+        network_cleints.append(get_virtual_network_client(region_config, signer))
+
+
+
+
+        __ip_sec_connections_objects = ParallelExecutor.executor(network_cleints, __compartments, ParallelExecutor.get_ip_sec_connections, len(__compartments), ParallelExecutor.ip_sec_connections)
+        __cross_connections_objects = ParallelExecutor.executor(network_cleints, __compartments, ParallelExecutor.get_cross_connects, len(__compartments), ParallelExecutor.cross_connects)
+        
+        # find compartment and region with VPN or FastConnect
+        for vpn_connections in __ip_sec_connections_objects:
+            region = vpn_connections.id.split('.')[3]
+            vpn_fc_connections_per_compartment.add((vpn_connections.compartment_id, region))
+
+        for fc_connections in __cross_connections_objects:
+            region = fc_connections.id.split('.')[3]
+            vpn_fc_connections_per_compartment.add((fc_connections.compartment_id, region))
 
     for com_region in vpn_fc_connections_per_compartment:
             region_needed = None

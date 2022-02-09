@@ -184,3 +184,13 @@ def turn_white(msg):
 
 def turn_grey(msg):
     return colored(msg, 'grey')
+
+
+def get_compartments_data(identity_client, compartment_id):
+    return oci.pagination.list_call_get_all_results(
+        identity_client.list_compartments,
+        compartment_id,
+        compartment_id_in_subtree=True,
+        lifecycle_state="ACTIVE",
+        retry_strategy=oci.retry.DEFAULT_RETRY_STRATEGY
+    ).data
