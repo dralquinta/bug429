@@ -152,6 +152,8 @@ def debug(msg, color=None):
     else:
         print(turn_white(debug_exp), flush=True)
 
+def get_current_date():
+    return str("["+datetime.now().strftime("%d/%m/%Y %H:%M:%S")+"]")
 
 
 def dye_return(msg):
